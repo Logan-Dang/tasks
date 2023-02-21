@@ -35,7 +35,7 @@ class Program
         Delete(args[1]);
         break;
       case "move":
-        Move(args[1], int.Parse(args[2]));
+        Move(int.Parse(args[1]), int.Parse(args[2]));
         break;
       case "list":
         List();
@@ -64,27 +64,24 @@ class Program
     Console.WriteLine($"Deleted task: {task}.");
   }
 
-  static void Move(string task, int position)
+  static void Move(int oldPos, int newPos)
   {
-    if (!tasks.Remove(task))
-    {
-      Console.WriteLine($"Task not found: {task}.");
-      Environment.Exit(1);
-      return;
-    }
-    if (position < 1)
+    
+    if (oldPos < 1 || newPos < 1)
     {
       Console.WriteLine("This command is one-based, not zero-based.");
       Environment.Exit(1);
       return;
     }
-    if (position > tasks.Count)
+    if (oldPos > tasks.Count || newPos > tasks.Count)
     {
       Console.WriteLine($"Invalid position, position must be less than or equal to {tasks.Count}");
       Environment.Exit(1);
       return;
     }
-    tasks.Insert(position - 1, task);
+    string task = tasks[oldPos - 1];
+    tasks.RemoveAt(oldPos - 1);
+    tasks.Insert(newPos - 1, task);
   }
 
   static void List()
